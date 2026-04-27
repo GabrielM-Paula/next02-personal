@@ -4,11 +4,13 @@ export default function Home() {
   return (
     <div>
       <NavBar />
-        <div className="flex flex-col items-center justify-center text-center p-10">
-          <img 
-            src="https://picsum.photos/400/300" alt="" className="rounded-xl shadow-lg mb-6" />
-          <h1 className="text-2xl font-bold">Bem-vindo ao projeto! Página Home</h1>
-        </div>
+      <div>
+        <img src="https://picsum.photos/1000/400" alt="" className="mx-auto mt-6"/>
+        <h1 className="text-3xl font-bold text-center mt-4">Bem-vindo ao meu site!</h1>
+        <p className="text-center text-gray-700 mt-2 max-w-md mx-auto">
+          Este é um exemplo de página inicial usando Next.js e Tailwind CSS. Explore as outras páginas para ver mais funcionalidades!
+        </p>
+      </div>
     </div>
   );
 }

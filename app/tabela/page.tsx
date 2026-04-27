@@ -1,33 +1,46 @@
 "use client";  // This is a client component, as it uses state and interactivity
+//sem o use client, você usar useState e UseEffect, mas não vai funcionar, porque o nextjs entende que é um componente server, e os componentes server não podem usar hooks de estado ou efeitos colaterais. O use client é necessário para indicar que esse componente deve ser renderizado no cliente, permitindo o uso de hooks como useState e useEffect para criar interatividade e gerenciar estado local.
+import NavBar from "../components/NavBar"; 
+import { useState } from "react"; 
+//para modificar o estado de alguma variável
 
-import { useState } from "react";
-
-type User = {
-  id: number;
+//mockando dados - simulando dados de uma API.
+type User = { //array de objetos.
+  id: number; //typescript
   name: string;
   email: string;
 };
-
-const initialData: User[] = [
+//dados fake só para iniciar a tabela.
+const initialData: User[] = [ //objetos no formato json.
   { id: 1, name: "João Silva", email: "joao@email.com" },
   { id: 2, name: "Maria Souza", email: "maria@email.com" },
   { id: 3, name: "Carlos Lima", email: "carlos@email.com" },
 ];
 
+//componente principal.
 export default function DataTable() {
   const [data, setData] = useState<User[]>(initialData);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [newName, setNewName] = useState("");
+  const [newEmail, setNewEmail] = useState("");
 
   function handleDelete(id: number) {
     setData(data.filter((item) => item.id !== id));
   }
-
   function handleEdit(id: number, currentName: string) {
     setEditingId(id);
     setNewName(currentName);
   }
-
+  function handleAdd() {
+    const newUser: User = {
+      id: data.length > 0 ? Math.max(...data.map((u) => u.id)) + 1 : 1, //gerar um id único numérico
+      name: newName,
+      email: newEmail
+    };
+    setData([...data, newUser]);
+    setNewName("");
+    setNewEmail("");
+  }
   function handleSave(id: number) {
     setData(
       data.map((item) =>
@@ -36,9 +49,39 @@ export default function DataTable() {
     );
     setEditingId(null);
   }
-
   return (
-    <div className="p-6">
+    <div>
+      <NavBar />
+      <div className="p-6">
+        <div>
+          <form method="get" className="mb-6" action={'#'}>
+            <input
+              type="text"
+              placeholder="Nome do usuário"
+              className="border p-2 rounded w-full mb-4"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+            />
+            <input
+              type="email"
+              placeholder="Email do usuário"
+              className="border p-2 rounded w-full mb-4"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              onClick={(e) => {
+                e.preventDefault();
+                handleAdd();
+              }}
+            >
+              Adicionar Usuário
+            </button>
+          </form>
+
+        </div>
       <div className="bg-white shadow-lg rounded-2xl p-4">
         <h2 className="text-xl font-semibold mb-4">Tabela de Usuários</h2>
 
@@ -104,5 +147,6 @@ export default function DataTable() {
         )}
       </div>
     </div>
+    </div>  
   );
 }
