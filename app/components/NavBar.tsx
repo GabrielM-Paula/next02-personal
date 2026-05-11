@@ -8,6 +8,9 @@ export default function NavBar() {
         <Link href="/form">Formulário</Link>
         <Link href="/galeria">Galeria</Link>
         <Link href="/tabela">Tabela</Link>
+        <Link href="/carousel">Carousel</Link>
+        <Link href="/modal">Modal</Link>
+        <Link href="/cadastro">Cadastro</Link>
     </nav>
   );
 }   
