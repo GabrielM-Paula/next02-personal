@@ -1,29 +1,84 @@
-"use client"
+"use client";
 
-import {useEffect} from "react"
+import { useEffect } from "react";
 
-export default function ModalComponent({ isOpen, onClose, children }: any) {
-    useEffect(() => {
-        function handle(e: any) { //pega evento de teclado
-            if (e.key === "Escape") onClose() //se for a tecla escape, fecha a modal
-        }
-        window.addEventListener("keydown", handle) //adiciona o evento de teclado
-        return () => window.removeEventListener("keydown", handle) //remove o evento de teclado quando o componente for desmontado
-    }, [onClose])
+type ModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+};
 
-    if (!isOpen) return null //se a modal não estiver aberta, não renderiza nada
-        //se a modal estiver aberta, renderiza o conteúdo da modal
-    return ( //modal centralizada na tela, com fundo branco, bordas arredondadas e sombra
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                <div className="flex justify-end">
-                    <button onClick={onClose}>
-                        X
-                    </button>
-                </div>
+export default function ModalComponent({
+  isOpen,
+  onClose,
+  children,
+}: ModalProps) {
 
-                {children}
-            </div>
+  useEffect(() => {
+    function handle(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+
+    window.addEventListener("keydown", handle);
+
+    return () =>
+      window.removeEventListener("keydown", handle);
+  }, [onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="
+        fixed inset-0 z-50
+        flex items-center justify-center
+        bg-black/30
+        backdrop-blur-sm
+        p-4
+      "
+    >
+
+      <div
+        className="
+          w-full max-w-lg
+          rounded-3xl
+          border border-white/20
+          bg-white/80
+          backdrop-blur-xl
+          shadow-2xl
+          p-6
+          animate-in fade-in zoom-in-95
+        "
+      >
+
+        {/* HEADER */}
+        <div className="flex items-center justify-between mb-6">
+
+          <h2 className="text-2xl font-bold text-gray-800">
+            Modal
+          </h2>
+
+          <button
+            onClick={onClose}
+            className="
+              w-10 h-10
+              rounded-full
+              bg-gray-100
+              hover:bg-red-100
+              hover:text-red-600
+              transition
+              font-bold
+            "
+          >
+            ✕
+          </button>
+
         </div>
-    )
+
+        {/* CONTEÚDO */}
+        {children}
+
+      </div>
+    </div>
+  );
 }
